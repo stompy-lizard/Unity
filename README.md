@@ -1,5 +1,5 @@
 # Instrucciones para añadir la generación aleatoria de enemigos.
-<p> Incluir el archivo de la carpeta src en Assets/FPS/Scripts/AI/ </p>
+<p> Incluir el archivo de la carpeta src en Assets/FPS/Scripts/AI/ (Sobreescribir)</p>
 </br>
 <p> Ir a la jerarquía del proyecto en Unity y escoger "Enemy_HoverBot"</p>
 </br>

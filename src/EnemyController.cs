@@ -118,9 +118,6 @@ namespace Unity.FPS.AI
         WeaponController[] m_Weapons;
         NavigationModule m_NavigationModule;
 
-
-        public GameObject[] spawnees;
-        public GameObject cloneSphere;
         public Transform spawnPos;
         float maxPos = 9;
         float minPos= 1;

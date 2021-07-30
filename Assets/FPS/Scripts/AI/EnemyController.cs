@@ -3,6 +3,7 @@ using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using System;
 
 namespace Unity.FPS.AI
 {

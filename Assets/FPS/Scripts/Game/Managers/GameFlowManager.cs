@@ -76,8 +76,7 @@ namespace Unity.FPS.Game
         {
             _gameDuration = DateTime.Now - _gameStartTime;
             AudioUtility.SetMasterVolume(1);
-            Debug.Log("_gameDuration");
-            Debug.Log(_gameDuration);
+            Debug.Log($"Game lasted {_gameDuration} seconds");
             Debug.Log(DateTime.Now.ToString());
 
             // unlocks the cursor before leaving the scene, to be able to click buttons

@@ -396,7 +396,7 @@ namespace Unity.FPS.AI
 
             // this will call the OnDestroy function
 
-            var theNewPos = new Vector3 (Random.Range(minPos,maxPos),0,Random.Range(minPos,maxPos));
+            var theNewPos = new Vector3 (UnityEngine.Random.Range(minPos,maxPos),0,UnityEngine.Random.Range(minPos,maxPos));
             Instantiate(gameObject, spawnPos.position, spawnPos.rotation);
             spawnPos.position = theNewPos;
 
@@ -466,7 +466,7 @@ namespace Unity.FPS.AI
             else if (DropRate == 1)
                 return true;
             else
-                return (Random.value <= DropRate);
+                return (UnityEngine.Random.value <= DropRate);
         }
 
         void FindAndInitializeAllWeapons()

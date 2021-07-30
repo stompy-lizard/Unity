@@ -17,7 +17,9 @@ namespace Unity.FPS.AI
 
         public void RegisterEnemy(EnemyController enemy)
         {
-            Enemies.Add(enemy);
+            if(NumberOfEnemiesTotal < 5){
+                Enemies.Add(enemy);
+            }
 
             NumberOfEnemiesTotal++;
         }

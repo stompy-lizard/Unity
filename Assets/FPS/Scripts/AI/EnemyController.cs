@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using System;
 
 namespace Unity.FPS.AI
 {
+
+
     [RequireComponent(typeof(Health), typeof(Actor), typeof(NavMeshAgent))]
+
     public class EnemyController : MonoBehaviour
     {
+
         [System.Serializable]
         public struct RendererIndexData
         {
@@ -118,8 +123,20 @@ namespace Unity.FPS.AI
         WeaponController[] m_Weapons;
         NavigationModule m_NavigationModule;
 
+        public Transform spawnPos;
+        float maxPos = 9;
+        float minPos= 1;
+
+        int randomInt;
+
+        private DateTime _gameStartTime;
+        private TimeSpan _gameDuration;
+
+
         void Start()
         {
+            _gameStartTime = DateTime.Now;
+
             m_EnemyManager = FindObjectOfType<EnemyManager>();
             DebugUtility.HandleErrorIfNullFindObject<EnemyManager, EnemyController>(m_EnemyManager, this);
 
@@ -202,6 +219,7 @@ namespace Unity.FPS.AI
 
         void Update()
         {
+
             EnsureIsWithinLevelBounds();
 
             DetectionModule.HandleTargetDetection(m_Actor, m_SelfColliders);
@@ -345,20 +363,23 @@ namespace Unity.FPS.AI
             {
                 // pursue the player
                 DetectionModule.OnDamaged(damageSource);
-                
+
                 onDamaged?.Invoke();
                 m_LastTimeDamaged = Time.time;
-            
+
                 // play the damage tick sound
                 if (DamageTick && !m_WasDamagedThisFrame)
                     AudioUtility.CreateSFX(DamageTick, transform.position, AudioUtility.AudioGroups.DamageTick, 0f);
-            
+
                 m_WasDamagedThisFrame = true;
             }
         }
 
         void OnDie()
         {
+            _gameDuration = DateTime.Now - _gameStartTime;
+            Debug.Log($"Enemy died after {_gameDuration} seconds");
+
             // spawn a particle system when dying
             var vfx = Instantiate(DeathVfx, DeathVfxSpawnPoint.position, Quaternion.identity);
             Destroy(vfx, 5f);
@@ -372,8 +393,15 @@ namespace Unity.FPS.AI
                 Instantiate(LootPrefab, transform.position, Quaternion.identity);
             }
 
+
             // this will call the OnDestroy function
+
+            var theNewPos = new Vector3 (UnityEngine.Random.Range(minPos,maxPos),0,UnityEngine.Random.Range(minPos,maxPos));
+            Instantiate(gameObject, spawnPos.position, spawnPos.rotation);
+            spawnPos.position = theNewPos;
+
             Destroy(gameObject, DeathDuration);
+
         }
 
         void OnDrawGizmosSelected()
@@ -438,7 +466,7 @@ namespace Unity.FPS.AI
             else if (DropRate == 1)
                 return true;
             else
-                return (Random.value <= DropRate);
+                return (UnityEngine.Random.value <= DropRate);
         }
 
         void FindAndInitializeAllWeapons()

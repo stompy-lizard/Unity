@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace Unity.FPS.Game
 {
@@ -30,6 +31,9 @@ namespace Unity.FPS.Game
 
         public bool GameIsEnding { get; private set; }
 
+        private DateTime _gameStartTime;
+        private TimeSpan _gameDuration;
+
         float m_TimeLoadEndGameScene;
         string m_SceneToLoad;
 
@@ -41,7 +45,10 @@ namespace Unity.FPS.Game
 
         void Start()
         {
+            _gameStartTime = DateTime.Now;
             AudioUtility.SetMasterVolume(1);
+            Debug.Log("DateTime.Now.ToString()");
+            Debug.Log(DateTime.Now.ToString());
         }
 
         void Update()
@@ -67,6 +74,11 @@ namespace Unity.FPS.Game
 
         void EndGame(bool win)
         {
+            _gameDuration = DateTime.Now - _gameStartTime;
+            AudioUtility.SetMasterVolume(1);
+            Debug.Log($"Game lasted {_gameDuration} seconds");
+            Debug.Log(DateTime.Now.ToString());
+
             // unlocks the cursor before leaving the scene, to be able to click buttons
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -95,14 +107,27 @@ namespace Unity.FPS.Game
                 //}
 
                 DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
-                displayMessage.Message = WinGameMessage;
+                displayMessage.Message = $"{WinGameMessage} Time: {_gameDuration}";
                 displayMessage.DelayBeforeDisplay = DelayBeforeWinMessage;
                 EventManager.Broadcast(displayMessage);
             }
             else
             {
                 m_SceneToLoad = LoseSceneName;
-                m_TimeLoadEndGameScene = Time.time + EndSceneLoadDelay;
+                m_TimeLoadEndGameScene = Time.time + EndSceneLoadDelay + DelayBeforeFadeToBlack;
+
+                // create a game message
+                //var message = Instantiate(WinGameMessagePrefab).GetComponent<DisplayMessage>();
+                //if (message)
+                //{
+                //    message.delayBeforeShowing = delayBeforeWinMessage;
+                //    message.GetComponent<Transform>().SetAsLastSibling();
+                //}
+
+                DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
+                displayMessage.Message = $"You Lost, Time: {_gameDuration}";
+                displayMessage.DelayBeforeDisplay = DelayBeforeWinMessage;
+                EventManager.Broadcast(displayMessage);
             }
         }
 

@@ -118,6 +118,12 @@ namespace Unity.FPS.AI
         WeaponController[] m_Weapons;
         NavigationModule m_NavigationModule;
 
+        public Transform spawnPos;
+        float maxPos = 9;
+        float minPos= 1;
+
+        int randomInt;
+
         void Start()
         {
             m_EnemyManager = FindObjectOfType<EnemyManager>();
@@ -373,6 +379,11 @@ namespace Unity.FPS.AI
             }
 
             // this will call the OnDestroy function
+
+            var theNewPos = new Vector3 (Random.Range(minPos,maxPos),0,Random.Range(minPos,maxPos));
+            Instantiate(gameObject, spawnPos.position, spawnPos.rotation);
+            spawnPos.position = theNewPos;
+
             Destroy(gameObject, DeathDuration);
         }
 

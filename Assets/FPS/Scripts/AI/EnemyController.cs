@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.AI;
@@ -6,9 +6,13 @@ using UnityEngine.Events;
 
 namespace Unity.FPS.AI
 {
+
+
     [RequireComponent(typeof(Health), typeof(Actor), typeof(NavMeshAgent))]
+
     public class EnemyController : MonoBehaviour
     {
+
         [System.Serializable]
         public struct RendererIndexData
         {
@@ -124,6 +128,9 @@ namespace Unity.FPS.AI
 
         int randomInt;
 
+
+        
+
         void Start()
         {
             m_EnemyManager = FindObjectOfType<EnemyManager>();
@@ -208,6 +215,7 @@ namespace Unity.FPS.AI
 
         void Update()
         {
+            
             EnsureIsWithinLevelBounds();
 
             DetectionModule.HandleTargetDetection(m_Actor, m_SelfColliders);
@@ -378,13 +386,15 @@ namespace Unity.FPS.AI
                 Instantiate(LootPrefab, transform.position, Quaternion.identity);
             }
 
+            
             // this will call the OnDestroy function
-
+    
             var theNewPos = new Vector3 (Random.Range(minPos,maxPos),0,Random.Range(minPos,maxPos));
             Instantiate(gameObject, spawnPos.position, spawnPos.rotation);
             spawnPos.position = theNewPos;
-
+    
             Destroy(gameObject, DeathDuration);
+    
         }
 
         void OnDrawGizmosSelected()

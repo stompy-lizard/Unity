@@ -107,14 +107,27 @@ namespace Unity.FPS.Game
                 //}
 
                 DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
-                displayMessage.Message = WinGameMessage;
+                displayMessage.Message = $"{WinGameMessage} Time: {_gameDuration}";
                 displayMessage.DelayBeforeDisplay = DelayBeforeWinMessage;
                 EventManager.Broadcast(displayMessage);
             }
             else
             {
                 m_SceneToLoad = LoseSceneName;
-                m_TimeLoadEndGameScene = Time.time + EndSceneLoadDelay;
+                m_TimeLoadEndGameScene = Time.time + EndSceneLoadDelay + DelayBeforeFadeToBlack;
+
+                // create a game message
+                //var message = Instantiate(WinGameMessagePrefab).GetComponent<DisplayMessage>();
+                //if (message)
+                //{
+                //    message.delayBeforeShowing = delayBeforeWinMessage;
+                //    message.GetComponent<Transform>().SetAsLastSibling();
+                //}
+
+                DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
+                displayMessage.Message = $"You Lost, Time: {_gameDuration}";
+                displayMessage.DelayBeforeDisplay = DelayBeforeWinMessage;
+                EventManager.Broadcast(displayMessage);
             }
         }
 
